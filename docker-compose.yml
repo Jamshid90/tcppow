@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./containers/server.Dockerfile
+    environment:
+      SERVER_HOST: "0.0.0.0"
+      SERVER_PORT: 9009
+      REDIS_HOST: "redis"
+      REDIS_PORT: 6379
+      REDIS_DATABASE: "0"
+      REDIS_PASSWORD: ""
+      HASH_DURATION: "1h"
+      HASH_MAX_ITERATIONS: 10000000
+      HASH_ZEROS_COUNT: 4
+    ports:
+      - '9009:9009'
+    restart: 'no'
+    depends_on:
+      - redis
+  client:
+    build:
+      context: .
+      dockerfile: ./containers/client.Dockerfile
+    environment:
+      SERVER_HOST: "server"
+      SERVER_PORT: 9009
+      REDIS_HOST: "redis"
+      REDIS_PORT: 6379
+      REDIS_DATABASE: "0"
+      REDIS_PASSWORD: ""
+      HASH_DURATION: "1h"
+      HASH_MAX_ITERATIONS: 10000000
+      HASH_ZEROS_COUNT: 4
+    restart: 'no'
+    depends_on:
+      - server
+  redis:
+      image: redis:6.2-alpine
+      ports:
+        - '6379:6379'

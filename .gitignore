@@ -1,0 +1,9 @@
+.env
+*.log
+*.DS_Store
+.vscode
+.go-cache
+.idea
+.idea/
+__MACOSX/
+bin/
